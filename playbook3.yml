@@ -1,0 +1,23 @@
+---
+
+- name: Install Apache with page
+  hosts: centos
+  become: yes
+
+  vars:
+          source_file: ./testweb/index.html
+          destin_file: /var/www/html
+  tasks:
+  - name: Install Apache
+    yum: name=httpd state=installed
+
+  - name: Copy Web
+    copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+    notify: Restart Apache
+
+  - name: Start Apache
+    command: /usr/sbin/httpd
+
+  handlers:
+  - name: Restart Apache
+    shell: pkill httpd && /usr/sbin/httpd 
