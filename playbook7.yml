@@ -12,15 +12,12 @@
     debug: var=ansible_os_family
 
   - block:  # Rhel Block 
-
-
         - name: Install Apache for Rhel
           yum: name=httpd state=installed
 
         - name: Start Apache Rhel
           command: /usr/sbin/httpd
     when: ansible_os_family == "RedHat"
-
 
   - block:    # Ubuntu Block
         - name: Install Apache for ubuntu
@@ -53,4 +50,3 @@
   - name: Restart Apache Ubuntu
     shell: /usr/sbin/apachectl restart
     when: ansible_os_family == "Debian"
-
