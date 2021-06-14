@@ -1,0 +1,47 @@
+---
+
+- name: Install Apache with page
+  hosts: linux_servers
+  become: yes
+
+  vars:
+          source_file: ./testweb/index.html
+          destin_file: /var/www/html
+  tasks:
+  - name: Check Linux Distr
+    debug: var=ansible_os_family
+
+  - block:  # Rhel Block 
+
+
+        - name: Install Apache for Rhel
+          yum: name=httpd state=installed
+
+        - name: Start Apache Rhel
+          command: /usr/sbin/httpd
+
+        - name: Copy Web
+          copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+          notify: Restart Apache Rhel
+    when: ansible_os_family == "RedHat"
+
+
+  - block:    # Ubuntu Block
+        - name: Install Apache for ubuntu
+          apt: name=apache2 state=latest
+
+        - name: Start Apache Ubuntu
+          command: /usr/sbin/apachectl start
+
+        - name: Copy Web
+          copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+          notify: Restart Apache Ubuntu
+    when: ansible_os_family == "Debian"
+
+  handlers:
+  - name: Restart Apache Rhel
+    shell: pkill httpd; /usr/sbin/httpd
+
+  - name: Restart Apache Ubuntu
+    shell: /usr/sbin/apachectl restart
+
