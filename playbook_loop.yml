@@ -1,0 +1,30 @@
+
+---
+
+- name: Loops Test
+  hosts: cent1
+  become: yes
+
+  tasks:
+  - name: msg to all
+    debug: msg="Message {{ item }}"
+    loop:
+     - "ms1"
+     - "ms2"
+     - "ms 3"  
+
+  - name: Until 
+    shell: echo -n q >> /tmp/myfile.txt; cat /tmp/myfile.txt
+    register: out
+    delay: 2
+    retries: 7
+    until:  out.stdout.find("qqq") == false
+
+  - name: Print STDOUT
+    debug: var=out.stdout
+
+  - name: Multi Install
+    yum: name={{ item }} state=latest
+    loop: 
+    - tree
+    - xauth 
