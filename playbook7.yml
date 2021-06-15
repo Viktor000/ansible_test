@@ -34,7 +34,7 @@
       - Restart Apache Ubuntu
 
   - name: Copy Web
-    copy: src={{ source_folder }}/{{item}} dest={{ destin_folder }} mode=0555
+    copy: src={{ source_folder }}/{{ item }} dest={{ destin_folder }} mode=0555
     loop:
       - "google.png"
       - "centos.png"

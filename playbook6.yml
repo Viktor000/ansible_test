@@ -32,7 +32,7 @@
 
   - name: Copy Web
     #    copy: src={{ source_folder }}/{{item}} dest={{ destin_folder }} mode=0555
-    copy: src={{item}} dest={{ destin_folder }} mode=0555
+    copy: src={{ item }} dest={{ destin_folder }} mode=0555
     with_fileglob: "{{ source_folder }}/*.*"
     #    loop:
     #  - "index.html"
