@@ -2,3 +2,7 @@
 
 skip_list:
   - '305'
+
+exclude_paths:
+ - ./roles/deploy_apache/.travis.yml
+ - .ansible-lint

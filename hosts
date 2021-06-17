@@ -1,3 +1,9 @@
+[prod]
+cent1	ansible_host=192.168.1.247
+
+[staging]
+cent2	ansible_host=192.168.1.248
+
 [centos]
 cent1	ansible_host=192.168.1.247
 cent2	ansible_host=192.168.1.248
