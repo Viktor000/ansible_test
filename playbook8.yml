@@ -1,0 +1,6 @@
+- name: Install Apache with Role
+  hosts: linux_servers
+  become: yes
+
+  roles: 
+  - { role: deploy_apache, when: ansible_system == 'Linux' }

@@ -21,7 +21,7 @@
 
   - block:    # Ubuntu Block
         - name: Install Apache for ubuntu
-          apt: name=apache2 state=latest
+          apt: name=apache2 state=present
 
         - name: Start Apache Ubuntu
           command: /usr/sbin/apachectl start

@@ -1,0 +1,36 @@
+---
+# tasks file for deploy_apache
+
+- name: Check Linux Distr
+  debug: var=ansible_os_family
+
+- block:  # Rhel Block 
+      - name: Install Apache for Rhel
+        yum: name=httpd state=installed
+
+      - name: Start Apache Rhel
+        command: /usr/sbin/httpd
+  when: ansible_os_family == "RedHat"
+
+- block:    # Ubuntu Block
+      - name: Install Apache for ubuntu
+        apt: name=apache2 state=present
+
+      - name: Start Apache Ubuntu
+        command: /usr/sbin/apachectl start
+  when: ansible_os_family == "Debian"
+
+- name: Generate HTML
+  template: src=index.j2 dest={{ destin_folder }}/index.html mode=0555
+  notify:
+    - Restart Apache Rhel
+    - Restart Apache Ubuntu
+
+- name: Copy Web
+  copy: src={{ item }} dest={{ destin_folder }} mode=0555
+  loop:
+    - "google.png"
+    - "centos.png"
+  notify: 
+    - Restart Apache Rhel
+    - Restart Apache Ubuntu
