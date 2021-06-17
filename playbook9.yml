@@ -1,0 +1,8 @@
+---
+- name: Install Apache with Role
+  hosts: '{{ myhosts }}' 
+  # extra-vars, run-> ansible-playbook playbook9.yml --extra-vars "myhosts=staging"
+  become: yes
+
+  roles: 
+  - { role: deploy_apache, when: ansible_system == 'Linux' }
