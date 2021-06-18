@@ -1,0 +1,30 @@
+---
+- name: Vault
+  hosts: centos
+  become: yes
+
+  vars:
+    admin_password: P@ssw0rd_Admin
+    user_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          38353138666565333832383164386166356664353530623835363236643334303231333935643266
+          3031343738616465306334636263663736353266613139660a643761656139343734623638386436
+          63313461366331636138626265633537663733633861663039393634613937326138636638306237
+          3533373531386238310a313265356530396461316239613039336466313134623334613033626362
+          6439
+    #ansible-playbook playbook12.yml --ask-vault-pass       ----ZZZ----
+  tasks:
+  - name: install tree
+    yum: name=tree
+
+  - name: Create config
+    copy: 
+     dest: /root/myconf.cfg
+     mode: 0644
+     content: |
+       port = 9090
+       log = 7days
+       home = /root/
+       user = admin
+       password = {{ admin_password }}
+       password2 = {{ user_password }}
