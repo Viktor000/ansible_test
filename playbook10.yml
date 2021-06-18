@@ -1,0 +1,54 @@
+---
+
+- name: playbook delegate
+  hosts: centos
+  become: yes
+
+  vars:
+   mytest: "Test Text"
+
+  tasks:
+  - name: Ping 
+    ping:
+
+
+  - name: Unregister1
+    shell: echo "server {{ inventory_hostname }} unreg from {{ ansible_nodename }}" >> /tmp/log.txt
+    delegate_to: 127.0.0.1 
+
+  - name: Update db
+    shell: echo /root/update.sh
+    run_once: true
+
+  - name: Create File1
+    copy:
+      dest: /tmp/file1.txt
+      mode: 0777
+      content: |
+        FileN1
+        Str1 is test
+        Str2 is {{ mytest }}
+    delegate_to: cent1
+
+  - name: Create File2
+    copy:
+      dest: /tmp/file2.txt
+      mode: 0777
+      content: |
+        FileN2
+        Str1 is test
+        Str2 is {{ mytest }}
+    delegate_to: cent2
+
+  - name: Reboot servers
+    shell: sleep 3 && reboot now
+    async: 1
+    poll: 0
+
+  - name: Wait up servers
+    wait_for: 
+        host: "{{ inventory_hostname }}"
+        state: started
+        delay: 5
+        timeout: 10 
+    delegate_to: 127.0.0.1
