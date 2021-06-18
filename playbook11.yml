@@ -1,0 +1,33 @@
+---
+- name: Error Handling
+  hosts: all
+  become: yes
+  any_errors_fatal: true
+
+  tasks:
+  - name: t1
+    yum: name=treee
+    ignore_errors: yes
+
+  - name: t2
+    shell: echo HW!
+    register: results
+#    failed_when: "'W!' in results.stdout"
+    failed_when: results.rc != 0
+
+  - name: test
+    shell: cat /etc/redhat-release
+    register: results2
+
+
+  - name: debug
+
+
+    debug:
+     var: results2
+
+  - name: t3
+    shell: echo HW2!
+  
+  
+
